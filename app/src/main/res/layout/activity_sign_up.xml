@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".SignUpActivity">
+
+    <include
+        android:id="@+id/login_toolbar"
+        layout="@layout/default_toolbar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create a new Account"
+        android:padding="16dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/matTextUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:met_floatingLabel="normal"
+        android:hint="Username"
+        android:padding="16dp"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/matTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:met_floatingLabel="normal"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="16dp"
+        />
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/matTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:met_floatingLabel="normal"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:text="Register"
+        android:onClick="registerMyUser"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        />
+
+    <TextView
+        android:id="@+id/textViewLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showLoginPage"
+        android:textColor="#111"
+        android:textSize="20dp"
+        android:text="Already having account then Login here"
+        />
+
+
+</LinearLayout>

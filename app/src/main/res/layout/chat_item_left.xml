@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="8dp"
+    android:maxWidth="300dp"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/recyProImage"
+        android:layout_width="40dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:textColor="#000000"
+        android:id="@+id/recyMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/back_left"
+        android:padding="8dp"
+        android:text="Message"
+        />
+
+</LinearLayout>
