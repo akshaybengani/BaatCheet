@@ -38,7 +38,7 @@ public class MessageActivity extends AppCompatActivity {
     Toolbar toolbar;
     CircleImageView toolbarProfileImage;
     TextView toolbarUserName;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference,dbrefChatList;
 
     ImageButton btnSend, btnSmiley;
     EditText editTextMessage;
@@ -126,8 +126,29 @@ public class MessageActivity extends AppCompatActivity {
                     editTextMessage.setText("");
                 }
             });
-        }
-    }
+
+
+            dbrefChatList = FirebaseDatabase.getInstance().
+                    getReference("BaatCheet/ChatList/")
+                    .child(senderuserID)
+                    .child(receiveruserID);
+
+            dbrefChatList.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists()){
+                        dbrefChatList.child("id").setValue(receiveruserID);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+
+
+
+        }// end of if
+    }// end of sendMessage
 
     private void openSmileyMenu() {
     }

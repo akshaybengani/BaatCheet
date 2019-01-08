@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.akshaybengani.baatcheet.Fragments.ChatFragment;
+import com.akshaybengani.baatcheet.Fragments.ProfileFragment;
 import com.akshaybengani.baatcheet.Fragments.UsersFragment;
 import com.akshaybengani.baatcheet.ModelClasses.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,31 +59,22 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.myViewPager);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
         databaseReference = FirebaseDatabase.getInstance().getReference("BaatCheet/Users/").child(firebaseUser.getUid());
         databaseReference.keepSynced(true);
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 final UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 textViewUserName.setText(userModel.getUsername());
-
-                if (userModel.getImageURL().equals("default"))
-                {
+                if (userModel.getImageURL().equals("default")) {
                     Picasso.get().load(R.mipmap.ic_launcher).into(circleImageView);
                 }
-                else
-                    {
+                else {
                         Picasso.get().load(userModel.getImageURL()).into(circleImageView);
-                    }
-
-            }
-
+                }
+            }// end of onDataChange
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });// end of value event listener
 
@@ -91,11 +83,10 @@ public class MainActivity extends AppCompatActivity {
         /*
                 Make sure to use
                 android.support.v4.app.Fragment
-
          */
-
         viewPagerAdapter.addFragments(new ChatFragment(), "Chats");
-        viewPagerAdapter.addFragments(new UsersFragment(),"Users");
+        viewPagerAdapter.addFragments(new UsersFragment(), "Users");
+        viewPagerAdapter.addFragments(new ProfileFragment(), "Profile");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -105,30 +96,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // This is to inflate the options menu on the toolbar
-        getMenuInflater().inflate(R.menu.topleftmenu,menu);
-        return  true;
+        getMenuInflater().inflate(R.menu.topleftmenu, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-            // For performing actions on the menu layout
-            if (item.getItemId() == R.id.logout) {
+        // For performing actions on the menu layout
+        if (item.getItemId() == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MainActivity.this,SplashScreen.class);
-                startActivity(intent);
-                finish();
-                return true;
-            }
+            Intent intent = new Intent(MainActivity.this, SplashScreen.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
 
         return false;
     }
 
 
-
-    class ViewPagerAdapter extends FragmentPagerAdapter{
+    class ViewPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Fragment> fragments;
-        private  ArrayList<String> titles;
+        private ArrayList<String> titles;
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -138,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int i) {
-          return   fragments.get(i);
+            return fragments.get(i);
         }
 
         @Override
@@ -146,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             return fragments.size();
         }
 
-        public void addFragments(Fragment fragment,String title){
+        public void addFragments(Fragment fragment, String title) {
             fragments.add(fragment);
             titles.add(title);
         }
@@ -154,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return  titles.get(position);
+            return titles.get(position);
         }
 
     }// end of ViewPagerAdapter class

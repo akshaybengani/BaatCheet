@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.akshaybengani.baatcheet.Adapters.UsersAdapter;
+import com.akshaybengani.baatcheet.ModelClasses.ChatList;
 import com.akshaybengani.baatcheet.ModelClasses.MessageModel;
 import com.akshaybengani.baatcheet.ModelClasses.UserModel;
 import com.akshaybengani.baatcheet.R;
@@ -36,7 +37,8 @@ public class ChatFragment extends Fragment {
     private List<UserModel>  userModelList;
     FirebaseUser firebaseUser;
     DatabaseReference databaseReference;
-    private List<String> stringList;
+
+    private List<ChatList> chatListList;
 
 
     public ChatFragment() {
@@ -54,76 +56,59 @@ public class ChatFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // private List<String> stringList; Declaration at top
-        stringList = new ArrayList<>();
+        // private List<ChatList> chatList; Declaration at top
+        chatListList = new ArrayList<>();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("BaatCheet/Chats/");
+        databaseReference = FirebaseDatabase
+                .getInstance()
+                .getReference("BaatCheet/ChatList")
+                .child(firebaseUser.getUid());
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //userModelList.clear();
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    MessageModel messageModel = dataSnapshot1.getValue(MessageModel.class);
 
-                    if (messageModel.getSender().equals(firebaseUser.getUid())){
-                      stringList.add(messageModel.getReceiver());
+                chatListList.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        ChatList chatList = snapshot.getValue(ChatList.class);
+                        chatListList.add(chatList);
                     }
-                    if (messageModel.getReceiver().equals(firebaseUser.getUid())){
-                        stringList.add(messageModel.getSender());
-                    }
-                }
-                readChat();
+                    myChatList();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
 
        return view;
     }
 
-    private void readChat() {
+    private void myChatList() {
 
         userModelList = new ArrayList<>();
         databaseReference = FirebaseDatabase.getInstance().getReference("BaatCheet/Users/");
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userModelList.clear();
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                    UserModel userModel = dataSnapshot1.getValue(UserModel.class);
-
-                    for (String id: stringList){
-                        if (userModel.getId().equals(id)){
-                            if (userModelList.size() !=0){
-                                for (UserModel userModel1 : userModelList){
-                                    if (!userModel.getId().equals(userModel1.getId())){
-                                        userModelList.add(userModel);
-                                        Log.d("DataAdded",userModel.getId());
-                                    } // If the existing list don't have same value for sender and reciever
-                                } // end of inner userModel
-                            } else {
-                                userModelList.add(userModel);
-                                Log.d("DataAdded",userModel.getId());
-                            } // end of else
-                        }   // end of userModel id equals string id
-                    }   // end of String is loop
-                }   // end of DataSnapshot loop
-
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    UserModel userModel = snapshot.getValue(UserModel.class);
+                    for (ChatList chatList : chatListList){
+                        if (userModel.getId().equals(chatList.getId())){
+                            userModelList.add(userModel);
+                        }
+                    }
+                }
                 usersAdapter = new UsersAdapter(userModelList);
                 recyclerView.setAdapter(usersAdapter);
-
-
-            } // end of onDataChange
-
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }// end of readChat()
 
+    }
+    
 
-}
+}//  end of class
