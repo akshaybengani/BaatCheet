@@ -18,18 +18,10 @@
             android:layout_height="wrap_content"
             android:text="Message"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="45dp"
             android:padding="8dp"
             android:textColor="#fff"
             android:layout_alignParentRight="true" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/recyProImage"
-            android:layout_width="40dp"
-            android:layout_alignParentEnd="true"
-            android:src="@mipmap/ic_launcher"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true" />
 
     </RelativeLayout>
 

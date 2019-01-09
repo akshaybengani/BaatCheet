@@ -70,6 +70,9 @@ public class UsersFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
+                    if (!userModelList.isEmpty()){
+                        userModelList.clear();
+                    }
                   for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                       UserModel userModel = dataSnapshot1.getValue(UserModel.class);
                       userModelList.add(userModel);

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.akshaybengani.baatcheet.MessageActivity;
 import com.akshaybengani.baatcheet.ModelClasses.UserModel;
 import com.akshaybengani.baatcheet.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -45,7 +47,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersAdapter
             holder.circleImageViewProfileImage.setImageResource(R.mipmap.ic_launcher);
         }
         else {
-            Picasso.get().load(userModelList.get(i).getImageURL()).into(holder.circleImageViewProfileImage);
+            Picasso.get().load(userModelList.get(i).getImageURL()).networkPolicy(NetworkPolicy.OFFLINE).into(holder.circleImageViewProfileImage, new Callback() {
+                @Override
+                public void onSuccess() {
+                }
+                @Override
+                public void onError(Exception e) {
+                    Picasso.get().load(userModelList.get(i).getImageURL()).into(holder.circleImageViewProfileImage);
+                }
+            });
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

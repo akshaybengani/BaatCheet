@@ -12,6 +12,8 @@ import com.akshaybengani.baatcheet.ModelClasses.MessageModel;
 import com.akshaybengani.baatcheet.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -50,14 +52,38 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessagesAdapterViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final MessagesAdapterViewHolder viewHolder, int i) {
 
         viewHolder.message.setText(messageModelList.get(i).getMessage());
 
-        if (imageURL.equals("default")){
-            viewHolder.profileImage.setImageResource(R.mipmap.ic_launcher);
-        } else {
-            Picasso.get().load(imageURL).into(viewHolder.profileImage);
+        /*
+        * Previously we have used imageViews in both the sides but the problem was
+        * the imageURL is single and this holder sets the imageurl to both the sides
+        *
+        * Since we have ImageView in only one side not in both sides as such
+        * we need to handle the set operation for the right side layout also
+        * therefore to avoid the exception raised by Android I have used try catch
+        * as such when the holder is in left then no exception occur and if it is in right
+        * then exception will occur but we have dealed with that
+        *
+        * In Future try to search some better option for handling this situation
+        */
+        try{
+            if (imageURL.equals("default")){
+                viewHolder.profileImage.setImageResource(R.mipmap.ic_launcher);
+            } else {
+                Picasso.get().load(imageURL).networkPolicy(NetworkPolicy.OFFLINE).into(viewHolder.profileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(imageURL).into(viewHolder.profileImage);
+                    }
+                });
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
     }

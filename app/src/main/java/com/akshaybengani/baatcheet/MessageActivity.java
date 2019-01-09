@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.akshaybengani.baatcheet.Adapters.MessagesAdapter;
 import com.akshaybengani.baatcheet.ModelClasses.MessageModel;
+import com.akshaybengani.baatcheet.ModelClasses.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -76,7 +79,15 @@ public class MessageActivity extends AppCompatActivity {
         if (receiverImageURL.equals("default")) {
             toolbarProfileImage.setImageResource(R.mipmap.ic_launcher);
         } else {
-            Picasso.get().load(receiverImageURL).into(toolbarProfileImage);
+            Picasso.get().load(receiverImageURL).networkPolicy(NetworkPolicy.OFFLINE).into(toolbarProfileImage, new Callback() {
+                @Override
+                public void onSuccess() {
+                }
+                @Override
+                public void onError(Exception e) {
+                        Picasso.get().load(receiverImageURL).into(toolbarProfileImage);
+                }
+            });
         }
 
         // Click events of Bottom Messaging system
@@ -99,6 +110,7 @@ public class MessageActivity extends AppCompatActivity {
         // Firebase Initialization
         senderuserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference("BaatCheet/Chats/");
+        databaseReference.keepSynced(true);
 
         // Setup the RecyclerView
         recyclerView = findViewById(R.id.recyclerMessages);
@@ -132,6 +144,8 @@ public class MessageActivity extends AppCompatActivity {
                     getReference("BaatCheet/ChatList/")
                     .child(senderuserID)
                     .child(receiveruserID);
+
+            dbrefChatList.keepSynced(true);
 
             dbrefChatList.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
