@@ -24,9 +24,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersAdapterViewHolder> {
 
     private List<UserModel> userModelList;
+    private boolean isChat;
 
-    public UsersAdapter(List<UserModel> userModelList) {
+    public UsersAdapter(List<UserModel> userModelList,boolean isChat) {
         this.userModelList = userModelList;
+        this.isChat = isChat;
     }
 
     @NonNull
@@ -47,16 +49,28 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersAdapter
             holder.circleImageViewProfileImage.setImageResource(R.mipmap.ic_launcher);
         }
         else {
-            Picasso.get().load(userModelList.get(i).getImageURL()).networkPolicy(NetworkPolicy.OFFLINE).into(holder.circleImageViewProfileImage, new Callback() {
-                @Override
-                public void onSuccess() {
-                }
-                @Override
-                public void onError(Exception e) {
+         //   Picasso.get().load(userModelList.get(i).getImageURL()).networkPolicy(NetworkPolicy.OFFLINE).into(holder.circleImageViewProfileImage, new Callback() {
+         //       @Override
+         //       public void onSuccess() {
+         //       }
+          //      @Override
+           //     public void onError(Exception e) {
                     Picasso.get().load(userModelList.get(i).getImageURL()).into(holder.circleImageViewProfileImage);
-                }
-            });
+          //      }
+          //  });
         }
+
+        if (isChat){
+            if (userModelList.get(i).getStatus().equals("online")){
+                holder.circleImageViewStatus.setImageResource(R.color.statusOnline);
+            }else{
+                holder.circleImageViewStatus.setImageResource(R.color.statusOffline);
+            }
+        }else {
+            holder.circleImageViewStatus.setImageResource(R.color.statusOffline);
+        }
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +93,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersAdapter
 
     public static class UsersAdapterViewHolder extends RecyclerView.ViewHolder{
 
-        CircleImageView circleImageViewProfileImage;
+        CircleImageView circleImageViewProfileImage,circleImageViewStatus;
         TextView textViewProfileName;
 
         public UsersAdapterViewHolder(@NonNull View itemView) {
@@ -87,6 +101,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersAdapter
 
              circleImageViewProfileImage = itemView.findViewById(R.id.recyProImage);
              textViewProfileName = itemView.findViewById(R.id.recyProName);
+            circleImageViewStatus = itemView.findViewById(R.id.userStatus);
         }
 
 

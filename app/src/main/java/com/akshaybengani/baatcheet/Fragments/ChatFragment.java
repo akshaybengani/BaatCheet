@@ -100,7 +100,7 @@ public class ChatFragment extends Fragment {
                         }
                     }
                 }
-                usersAdapter = new UsersAdapter(userModelList);
+                usersAdapter = new UsersAdapter(userModelList,true);
                 recyclerView.setAdapter(usersAdapter);
             }
             @Override

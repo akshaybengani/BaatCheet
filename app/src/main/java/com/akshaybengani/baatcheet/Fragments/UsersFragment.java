@@ -64,7 +64,7 @@ public class UsersFragment extends Fragment {
 
         userModelList = new ArrayList<>();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("BaatCheet/Users/");
-        databaseReference.keepSynced(true);
+        //databaseReference.keepSynced(true);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -77,7 +77,7 @@ public class UsersFragment extends Fragment {
                       UserModel userModel = dataSnapshot1.getValue(UserModel.class);
                       userModelList.add(userModel);
                   }
-                  usersAdapter = new UsersAdapter(userModelList);
+                  usersAdapter = new UsersAdapter(userModelList,true);
                   recyclerViewUsers.setAdapter(usersAdapter);
                 }
             }

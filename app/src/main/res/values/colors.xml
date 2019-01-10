@@ -3,4 +3,6 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#008577</color>
+    <color name="statusOnline">#00ff1e</color>
+    <color name="statusOffline">#a9a9a9</color>
 </resources>

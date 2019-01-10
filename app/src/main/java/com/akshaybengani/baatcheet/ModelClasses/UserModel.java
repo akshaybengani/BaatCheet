@@ -2,16 +2,7 @@ package com.akshaybengani.baatcheet.ModelClasses;
 
 public class UserModel {
 
-    private  String id,username,imageURL;
-
-    public UserModel(String id, String username, String imageURL) {
-        this.id = id;
-        this.username = username;
-        this.imageURL = imageURL;
-    }
-
-    public UserModel() {
-    }
+    private  String id,username,imageURL,status;
 
     public String getId() {
         return id;
@@ -36,4 +27,25 @@ public class UserModel {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public UserModel(String id, String username, String imageURL, String status) {
+
+        this.id = id;
+        this.username = username;
+        this.imageURL = imageURL;
+        this.status = status;
+    }
+
+    public UserModel() {
+    }
+
+
 }

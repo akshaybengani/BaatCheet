@@ -41,7 +41,7 @@ public class MessageActivity extends AppCompatActivity {
     Toolbar toolbar;
     CircleImageView toolbarProfileImage;
     TextView toolbarUserName;
-    DatabaseReference databaseReference,dbrefChatList;
+    DatabaseReference databaseReference,dbrefChatList,dbUserStatus;
 
     ImageButton btnSend, btnSmiley;
     EditText editTextMessage;
@@ -68,7 +68,9 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(MessageActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -79,15 +81,15 @@ public class MessageActivity extends AppCompatActivity {
         if (receiverImageURL.equals("default")) {
             toolbarProfileImage.setImageResource(R.mipmap.ic_launcher);
         } else {
-            Picasso.get().load(receiverImageURL).networkPolicy(NetworkPolicy.OFFLINE).into(toolbarProfileImage, new Callback() {
-                @Override
-                public void onSuccess() {
-                }
-                @Override
-                public void onError(Exception e) {
+           // Picasso.get().load(receiverImageURL).networkPolicy(NetworkPolicy.OFFLINE).into(toolbarProfileImage, new Callback() {
+            //    @Override
+           //     public void onSuccess() {
+          //      }
+          //      @Override
+         //       public void onError(Exception e) {
                         Picasso.get().load(receiverImageURL).into(toolbarProfileImage);
-                }
-            });
+        //        }
+        //    });
         }
 
         // Click events of Bottom Messaging system
@@ -109,8 +111,9 @@ public class MessageActivity extends AppCompatActivity {
 
         // Firebase Initialization
         senderuserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        dbUserStatus = FirebaseDatabase.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference("BaatCheet/Chats/");
-        databaseReference.keepSynced(true);
+        //databaseReference.keepSynced(true);
 
         // Setup the RecyclerView
         recyclerView = findViewById(R.id.recyclerMessages);
@@ -197,4 +200,36 @@ public class MessageActivity extends AppCompatActivity {
 
     }// end of readMessage
 
+
+    private  void status(String status){
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("status",status);
+        dbUserStatus.child("BaatCheet/Users").child(senderuserID).updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
+
 }// end of class
+
+/*
+* Android Notifications
+* BarChart
+* ChatApplication
+* JUMess
+* JUMessManagement
+* RecyclerCheckBox
+* barcode Reader
+* Android Basics
+* SOS Buddy
+* Akshay Bengani
+* */
