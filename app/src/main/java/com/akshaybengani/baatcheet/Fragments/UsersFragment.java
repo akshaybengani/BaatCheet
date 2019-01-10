@@ -6,9 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,8 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UsersFragment extends Fragment {
 
     RecyclerView recyclerViewUsers;
-    CircleImageView circleImageViewProfileImage;
-    TextView textViewProfileName;
+    EditText editTextSearch;
     List<UserModel> userModelList;
     UsersAdapter usersAdapter;
 
@@ -51,13 +53,40 @@ public class UsersFragment extends Fragment {
 
         // Users Recycler view
         recyclerViewUsers = view.findViewById(R.id.recyclerUsers);
+        editTextSearch = view.findViewById(R.id.editTextUserSearch);
 
         getUsersFromServer();
 
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                    myUserFilter(s.toString());
+            }
+        });
+
+
         return  view;
+    }
+
+    private void myUserFilter(String s) {
+
+        ArrayList<UserModel> userFilteredList = new ArrayList<>();
+
+        for (UserModel userModel : userModelList){
+            if (userModel.getUsername().toLowerCase().contains(s.toLowerCase())){
+                    userFilteredList.add(userModel);
+            }
+        }
+        usersAdapter.filterList(userFilteredList);
     }
 
     private void getUsersFromServer() {

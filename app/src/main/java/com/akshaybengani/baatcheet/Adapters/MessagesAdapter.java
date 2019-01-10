@@ -86,6 +86,15 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             e.printStackTrace();
         }
 
+        if (i == messageModelList.size()-1){
+            if (messageModelList.get(i).isIsseen()){
+                viewHolder.seenStatus.setText("Seen");
+            }
+            else {
+                viewHolder.seenStatus.setText("Delivered");
+            }
+        }
+
     }
 
     @Override
@@ -98,12 +107,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
         public TextView message;
         public CircleImageView profileImage;
+        public TextView seenStatus;
 
         public MessagesAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
             message = itemView.findViewById(R.id.recyMessage);
             profileImage = itemView.findViewById(R.id.recyProImage);
+            seenStatus = itemView.findViewById(R.id.seenStatus);
 
 
         }// end of constructor

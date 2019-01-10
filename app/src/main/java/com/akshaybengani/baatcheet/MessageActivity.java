@@ -50,6 +50,8 @@ public class MessageActivity extends AppCompatActivity {
     List<MessageModel> messageModelList;
     RecyclerView recyclerView;
 
+    ValueEventListener  seenListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,16 +126,38 @@ public class MessageActivity extends AppCompatActivity {
 
         // To fill up the menu
         readMessage();
+        seenMessage();
 
     }// end of oncreate
+
+    private void seenMessage(){
+        seenListener = databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    MessageModel messageModel = snapshot.getValue(MessageModel.class);
+                    if (messageModel.getReceiver().equals(senderuserID) && messageModel.getSender().equals(receiveruserID)){
+                        HashMap<String,Object> hashMap = new HashMap<>();
+                        hashMap.put("isseen",true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 
     private void sendMessage() {
 
         if (!TextUtils.isEmpty(editTextMessage.getText())) {
-            HashMap<String, String> hashMap = new HashMap<>();
+            HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("sender", senderuserID);
             hashMap.put("receiver", receiveruserID);
             hashMap.put("message", editTextMessage.getText().toString());
+            hashMap.put("isseen", false);
 
             databaseReference.push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -216,6 +240,9 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (seenListener!=null){
+            databaseReference.removeEventListener(seenListener);
+        }
         status("offline");
     }
 

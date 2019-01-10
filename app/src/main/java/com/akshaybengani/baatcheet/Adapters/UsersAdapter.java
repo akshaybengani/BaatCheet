@@ -16,6 +16,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -82,12 +83,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersAdapter
             }
         });
 
-
     }
+
 
     @Override
     public int getItemCount() {
         return userModelList.size();
+    }
+
+    public void filterList(ArrayList<UserModel> userFilteredList) {
+        userModelList = userFilteredList;
+        notifyDataSetChanged();
     }
 
 
