@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.akshaybengani.baatcheet">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +23,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".ResetPasswordActivity"></activity>
     </application>
 
 </manifest>
